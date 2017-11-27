@@ -34,7 +34,7 @@ public class AntColony {
     private List<Ant> ants = new ArrayList<>();
     
     private String[] bestTourSwitch = new String[10];
-    private double bestTourCost;
+    private double[] bestTourCost;
 	private ArrayList<Switch> switchs = new ArrayList<>();
 //	private ArrayList<Link> links = new ArrayList<>();
 	private ArrayList<Graph> graphs = new ArrayList<>();
@@ -71,24 +71,24 @@ public class AntColony {
     			if (src.isEqualSw(dst)) {
     				links.add(new Link(src, dst, 0.0));
     			} else {
-    				if (src.getPos() == 2 && dst.getPos() == 5) {
-    					links.add(new Link(src, dst, -1));
-    				} else if (src.getPos() == 4 && dst.getPos() == 7) {
-    					links.add(new Link(src, dst, -1));
-    				} else if (src.getPos() == 5 && dst.getPos() == 2) {
-    					links.add(new Link(src, dst, -1));
-    				} else if (src.getPos() == 6 && dst.getPos() == 9) {
-    					links.add(new Link(src, dst, -1));
-    				} else if (src.getPos() == 7 && dst.getPos() == 4) {
-    					links.add(new Link(src, dst, -1));
-    				} else if (src.getPos() == 9 && dst.getPos() == 6) {
-    					links.add(new Link(src, dst, -1));
-    				} else {
-    					double cost = Math.abs(random.nextInt(100) + 1);
-            			links.add(new Link(src, dst, cost));
-    				}
-//    				double cost = Math.abs(random.nextInt(100) + 1);
-//        			links.add(new Link(src, dst, cost));
+//    				if (src.getPos() == 2 && dst.getPos() == 5) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else if (src.getPos() == 4 && dst.getPos() == 7) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else if (src.getPos() == 5 && dst.getPos() == 2) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else if (src.getPos() == 6 && dst.getPos() == 9) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else if (src.getPos() == 7 && dst.getPos() == 4) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else if (src.getPos() == 9 && dst.getPos() == 6) {
+//    					links.add(new Link(src, dst, -1));
+//    				} else {
+//    					double cost = Math.abs(random.nextInt(100) + 1);
+//            			links.add(new Link(src, dst, cost));
+//    				}
+    				double cost = Math.abs(random.nextInt(100) + 1);
+        			links.add(new Link(src, dst, cost));
     			}	
     		});
 //    		System.out.println("**********************************" + links.get(0).getCost());
@@ -129,6 +129,7 @@ public class AntColony {
         System.out.println("Best tour length: " + (bestTourLength - numberOfCities));
         System.out.println("Best tour order: " + Arrays.toString(bestTourOrder));
         System.out.println("Best tour Switch: " + Arrays.toString(bestTourSwitch));
+        System.out.println("Best tour Cost: " + Arrays.toString(bestTourCost));
         return bestTourOrder.clone();
     }
     
@@ -283,13 +284,11 @@ public class AntColony {
             bestTourOrder = ants.get(0).trail;
             bestTourLength = ants.get(0)
                 .trailLength(graphs);
-        }
-        
-        if (bestTourSwitch == null) {
-        	for (int i = 0; i < numberOfCities; i++) {
+            
+            for (int i = 0; i < numberOfCities; i++) {
         		bestTourSwitch[i] = ants.get(0).switchs.get(i).getSw();
-//        		bestTourCost[i] = 
             }
+            bestTourCost = ants.get(0).arrayCost(graphs);
         }
         
         for (Ant a : ants) {
@@ -300,6 +299,8 @@ public class AntColony {
                 for (int i = 0; i < numberOfCities ; i++) {
                 	bestTourSwitch[i] = a.switchs.get(i).getSw();
                 }
+                
+                bestTourCost = a.arrayCost(graphs);
             }
         }
     }

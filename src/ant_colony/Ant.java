@@ -46,6 +46,15 @@ public class Ant {
 		}
 		return length;
 	}
+	
+	protected double[] arrayCost(ArrayList<Graph> graphs) {
+		double[] listCosts = new double[9];
+		for (int i = 0; i < trailSize - 1; i++) {
+			listCosts[i] = graphs.get(trail[i]).getLinks().get(trail[i + 1]).getCost();
+		}
+		
+		return listCosts;
+	}
 
 	protected void clear() {
 		for (int i = 0; i < trailSize; i++){
