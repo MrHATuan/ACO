@@ -10,6 +10,10 @@ public class Link {
 		this.dst = dst;
 		this.cost = cost;
 	}
+//	public Link(Switch src, Switch dst) {
+//		this.src = src;
+//		this.dst = dst;
+//	}
 	
 	public Switch getSrc() {
 		return src;
@@ -21,5 +25,13 @@ public class Link {
 	
 	public double getCost() {
 		return cost;
+	}
+	
+	public boolean hasCost() {
+		if (cost >= 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
